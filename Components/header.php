@@ -214,7 +214,7 @@ $CountNotification = count($notifications);
                              data-lock-picture="../img/cps_logo.png"/> -->
 
                         <img src="../img/bbs-logo.png" alt="Joseph Doe" class="rounded-circle"
-                             data-lock-picture="../img/sas_logo.png"/>
+                             data-lock-picture="../img/bbs-logo.png"/>
 
                     </figure>
                     <div class="profile-info" data-lock-name="<?php echo $loggedUserName; ?>" data-lock-email="#">
