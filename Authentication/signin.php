@@ -73,7 +73,7 @@ if ($_POST['login'] === "login") {
 </head>
 <!-- <body style="background-image: url('../../img/cps-web-bg.jpg')"> -->
 
-<body style="background-image: url('../../img/sas-login-bg.jpg')">
+<body style="background-image: url('../img/qgdp-login-bg.jpg')">
 
 <!-- start: page -->
 <section class="body-sign">
@@ -81,7 +81,7 @@ if ($_POST['login'] === "login") {
         <a href="<?php echo $baseURL; ?>" class="logo float-start" style="padding: 10px">
             <!-- <img src="../img/cps-logo-web.png" height="70" alt="Solvers"/> -->
 
-            <img src="../img/sas-logo-web.png" height="70" alt="Solvers"/>
+            <img src="../img/qgdp-logo-web.png" height="70" alt="Solvers"/>
 
         </a>
 

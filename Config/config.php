@@ -9,9 +9,9 @@ function get_base_url()
     return env('APP_URL');
 }
 
-$projectName = 'Sustainable Agriculture Statistics';
-$projectDescription= 'Sustainable Agriculture Statistics (QGDP) - 2025';
-$projectDescription2= 'টেকসই কৃষি পরিসংখ্যান (এসএএস) ২০২৫';
+$projectName = 'QGDP';
+$projectDescription= 'Quarterly Gross Domestic Product (QGDP)';
+$projectDescription2= 'ত্রৈমাসিক মোট দেশজ উৎপাদ (QGDP)';
 
 $adminUserID = '2';
 

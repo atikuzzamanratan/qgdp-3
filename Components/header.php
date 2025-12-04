@@ -42,7 +42,7 @@ $CountNotification = count($notifications);
             </a> -->
 
             <a href="<?php echo $baseURL; ?>" class="logo">
-                <img src="../img/sas_logo.png" width="50" alt="SAS Admin"/>
+                <!--<img src="../img/bbs-logo.png" width="50" alt="QGDP Admin"/>-->
             </a>
 
             <button class="btn header-btn-collapse-nav d-lg-none" data-bs-toggle="collapse"
@@ -213,7 +213,7 @@ $CountNotification = count($notifications);
                         <!-- <img src="../img/cps_logo.png" alt="Joseph Doe" class="rounded-circle"
                              data-lock-picture="../img/cps_logo.png"/> -->
 
-                        <img src="../img/sas_logo.png" alt="Joseph Doe" class="rounded-circle"
+                        <img src="../img/bbs-logo.png" alt="Joseph Doe" class="rounded-circle"
                              data-lock-picture="../img/sas_logo.png"/>
 
                     </figure>

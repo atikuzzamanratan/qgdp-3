@@ -16,13 +16,11 @@
                     <div class="card-body" style="text-align: center; height: 100vh">
                         <!-- <div><h3>Welcome to the project</h3></div>-->
 
-                        <div><img src="img/sas_logo.png" alt="SAS Logo" height="300px"></div>
+                        <div><img src="img/bbs-logo.png" alt="QGDP Logo" height="300px"></div>
 
                         <div>
-                            <!--<b style="font-size: 17px; line-height: 2"><?php /*echo $projectDescription; */?></b>
-                            <p style="font-size: 17px; line-height: 2"><?php /*echo $projectDescription2; */?></p>-->
-                            <b style="font-size: 19px; line-height: 2">কৃষি শ্রম একক প্রতি উৎপাদন ও উৎপাদকের গড় আয় নিরুপণ জরিপ-২০২৫</b>
-                            <p style="font-size: 18px; line-height: 2; color: #0a0a0a;">টেকসই কৃষি পরিসংখ্যান প্রকল্প (২য় জরিপ)</p>
+                            <b style="font-size: 17px; line-height: 2"><?php echo $projectDescription; ?></b>
+                            <p style="font-size: 17px; line-height: 2"><?php echo $projectDescription2; ?></p>
                         </div>
                     </div>
                 </section>
