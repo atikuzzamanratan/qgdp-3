@@ -1,5 +1,5 @@
 <?php
-$qryParent = "select distinct MenuId,MenuLavel,Menuurl,isLink,Parent,MenuOrder from menudefine where isLink = 'False' AND 
+$qryParent = "select distinct MenuId,MenuLavel,Menuurl,isLink,Parent,MenuOrder from menudefine where isLink = 'False'  AND isActive = 1 AND 
    MenuId in(select MenuId from rolemenu where permission=1 and RoleId in(select RoleId from userrole 
    where UserID in(select id from userinfo Where UserName = ?))) order by MenuOrder asc";
 $stmQryNavMenuParent = $app->getDBConnection()->fetchAll($qryParent, $loggedUserName);
@@ -28,7 +28,7 @@ foreach ($stmQryNavMenuParent as $navMenuRow) {
         <ul class="dropdown-menu">
             <?php
             $qryChild = "select distinct MenuId,MenuLavel,Menuurl,isLink,Parent,MenuOrder from menudefine 
-            where Parent = ? and isLink = 'True' AND MenuId in(select MenuId from rolemenu 
+            where isActive = 1 AND Parent = ? and isLink = 'True' AND MenuId in(select MenuId from rolemenu 
             where permission=1 and RoleId in(select RoleId from userrole where UserID in(select id from userinfo Where UserName = ?))) 
             order by MenuOrder asc ";
             $stmQryNavMenuChild = $app->getDBConnection()->fetchAll($qryChild, $menuOrderParent, $loggedUserName);

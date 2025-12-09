@@ -71,14 +71,15 @@ if ($_REQUEST['show'] === 'Show') {
                                 <div class="col-lg-6">
                                     <select data-plugin-selectTwo id="SelectedFormID" name="SelectedFormID"
                                         class="form-control populate" required>
-                                        <option value="">Choose form</option>
+                                        <optgroup label="Choose form">
                                         <?PHP
-                                        $qryForm = $app->getDBConnection()->query("SELECT id, FormName FROM datacollectionform WHERE CompanyID = ?", $loggedUserCompanyID);
+                                        $qryForm = $app->getDBConnection()->query("SELECT id, FormName FROM datacollectionform WHERE Status = 'Active' AND CompanyID = ?", $loggedUserCompanyID);
 
                                         foreach ($qryForm as $row) {
                                             echo '<option value="' . $row->id . '"' . (isset($SelectedFormID) && !empty($SelectedFormID) && $row->id == $SelectedFormID ? ' selected' : '') . '>' . $row->FormName . '</option>';
                                         }
                                         ?>
+                                        </optgroup>
                                     </select>
                                 </div>
                             </div>
@@ -87,9 +88,7 @@ if ($_REQUEST['show'] === 'Show') {
                             ?>
                                 <div class="form-group row pb-3">
                                     <label class="col-lg-3 control-label text-sm-end pt-2">Division Select
-                                        
-                                            
-                                        
+
                                     </label>
                                     <div class="col-lg-6">
                                         <select data-plugin-selectTwo class="form-control populate" name="DivisionCode"
@@ -107,27 +106,27 @@ if ($_REQUEST['show'] === 'Show') {
                                 </div>
                                 <div id="geoDiv" style="display: none">
                                     <div class="form-group row pb-3" id="DistrictDiv"></div>
-                                    <div class="form-group row pb-3" id="UpazilaDiv"></div>
+                                    <!--<div class="form-group row pb-3" id="UpazilaDiv"></div>
                                     <div class="form-group row pb-3" id="UnionWardDiv"></div>
                                     <div class="form-group row pb-3" id="MauzaDiv"></div>
-                                    <div class="form-group row pb-3" id="VillageDiv"></div>
+                                    <div class="form-group row pb-3" id="VillageDiv"></div>-->
                                 </div>
                             <?php
                             }
                             ?>
-                            <div class="form-group row pb-3" id="userDiv">
+                            <!--<div class="form-group row pb-3" id="userDiv">
                                 <label class="col-lg-3 control-label text-sm-end pt-2">User Select
-                                    <?php if (strpos($loggedUserName, 'cs') !== false) { ?><span class="required">*</span><?php } ?></label>
+                                    <?php /*if (strpos($loggedUserName, 'cs') !== false) { */?><span class="required">*</span><?php /*} */?></label>
                                 <div class="col-lg-6">
                                     <select data-plugin-selectTwo class="form-control populate"
                                         name="SelectedUserID"
-                                        <?php if (strpos($loggedUserName, 'cs') !== false) { ?>
+                                        <?php /*if (strpos($loggedUserName, 'cs') !== false) { */?>
                                         required
-                                        <?php } ?>
+                                        <?php /*} */?>
                                         id="SelectedUserID" title="Please select user">
                                         <option value="">Choose user</option>
                                         <?PHP
-                                        if ($loggedUserName == 'admin') {
+/*                                        if ($loggedUserName == 'admin') {
                                             $qryDistUser = "SELECT id, UserName, FullName FROM userinfo WHERE IsActive = 1 AND UserName LIKE '$dataCollectorNamePrefix%' ORDER BY UserName ASC";
                                             $resQryDistUser = $app->getDBConnection()->fetchAll($qryDistUser);
                                         } else if (strpos($loggedUserName, 'admin') !== false) {
@@ -150,39 +149,39 @@ if ($_REQUEST['show'] === 'Show') {
                                         foreach ($resQryDistUser as $row) {
                                             echo '<option value="' . $row->id . '"' . (isset($SelectedUserID) && !empty($SelectedUserID) && $row->id == $SelectedUserID ? ' selected' : '') . '>' . $row->UserName . ' | ' . substr($row->FullName, 0, 102) . '</option>';
                                         }
-                                        ?>
+                                        */?>
                                     </select>
                                 </div>
-                            </div>
+                            </div>-->
 
-                            <div class="form-group row pb-3">
+                            <!--<div class="form-group row pb-3">
                                 <label class="col-lg-3 control-label text-lg-end pt-2">Date range</label>
                                 <div class="col-lg-6">
                                     <div class="input-daterange input-group">
                                         <input type="date" class="form-control" id="startDate"
-                                            name="startDate" value="<?php echo isset($SelectedStartDate) ? $SelectedStartDate : ''; ?>">
+                                            name="startDate" value="<?php /*echo isset($SelectedStartDate) ? $SelectedStartDate : ''; */?>">
                                         <span class="input-group-text border-start-0 border-end-0 rounded-0">to</span>
-                                        <input type="date" class="form-control" id="endDate" name="endDate" value="<?php echo isset($SelectedEndDate) ? $SelectedEndDate : ''; ?>">
+                                        <input type="date" class="form-control" id="endDate" name="endDate" value="<?php /*echo isset($SelectedEndDate) ? $SelectedEndDate : ''; */?>">
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
 
 
                             <?php
-                            if (strpos($loggedUserName, 'cs') === false) {
-                            ?>
+/*                            if (strpos($loggedUserName, 'cs') === false) {
+                            */?><!--
                                 <div class="form-group row pb-3">
                                     <label class="col-lg-3 control-label text-sm-end pt-2"></label>
                                     <div class="col-lg-6">
                                         <div class="checkbox-custom checkbox-warning">
-                                            <input id="chkAll" value="chkAll" type="checkbox" name="chkAll" <?php echo isset($checkAll) && $checkAll == 'chkAll' ? 'checked' : ''; ?> />
+                                            <input id="chkAll" value="chkAll" type="checkbox" name="chkAll" <?php /*echo isset($checkAll) && $checkAll == 'chkAll' ? 'checked' : ''; */?> />
                                             <label for="chkAll">All Users</label>
                                         </div>
                                     </div>
                                 </div>
-                            <?php
-                            }
-                            ?>
+                            --><?php
+/*                            }
+                            */?>
 
                             <footer class="card-footer">
                                 <div class="row justify-content-end">

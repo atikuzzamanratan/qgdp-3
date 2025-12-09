@@ -26,7 +26,7 @@ $SuperID = $rsSupervisor->id;
                                             class="form-control populate" required>
                                         <optgroup label="Select Form">
                                             <?PHP
-                                            $qryForm = $app->getDBConnection()->query("SELECT id, FormName FROM datacollectionform WHERE CompanyID = ?", $loggedUserCompanyID);
+                                            $qryForm = $app->getDBConnection()->query("SELECT id, FormName FROM datacollectionform WHERE Status = 'Active' AND CompanyID = ?", $loggedUserCompanyID);
 
                                             foreach ($qryForm as $row) {
                                                 echo '<option value="' . $row->id . '">' . $row->FormName . '</option>';
