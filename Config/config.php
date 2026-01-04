@@ -41,6 +41,10 @@ $formIdSamplingData = 2;
 $formIdMainData = 3;
 $formIdFarmData = 4;
 
+$DataStatusPending = 0;
+$DataStatusApproved = 1;
+$DataStatusUnApproved = 2;
+
 $maxNumberOfHHForSampling = 20;
 
 $todayDate = date("Y-m-d");

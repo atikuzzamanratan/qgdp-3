@@ -3,9 +3,9 @@ ob_start();
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-set_error_handler(function($errno, $errstr, $errfile, $errline) {
+set_error_handler(function ($errno, $errstr, $errfile, $errline) {
     if ($errno === E_NOTICE || $errno === E_WARNING) {
-        file_put_contents(__DIR__ . '/_ajax_error_log.txt', 
+        file_put_contents(__DIR__ . '/_ajax_error_log.txt',
             date('Y-m-d H:i:s') . " [$errno] $errstr in $errfile:$errline\n", FILE_APPEND);
         return true;
     }
@@ -27,232 +27,84 @@ if (!$cn) {
     die("Database connection failed.\n\n" . print_r(sqlsrv_errors(), true));
 }
 
-if (!empty($_POST)) {
-    $request = $_REQUEST;
-    $DataFromID = xss_clean($_REQUEST["DataFromID"]);
-    $DataUserID = xss_clean($_REQUEST["DataUserID"]);
-    $DataChkAll = xss_clean($_REQUEST["DataChkAll"]);
-    $DataCompanyID = xss_clean($_REQUEST["DataCompanyID"]);
-    $LoggedUserName = xss_clean($_REQUEST["LoggedUserName"]);
-    $LoggedUserID = xss_clean($_REQUEST["LoggedUserID"]);
-    $DataStartDate = xss_clean($_REQUEST["DataStartDate"]);
-    $DataEndDate = xss_clean($_REQUEST["DataEndDate"]);
 
-    $col[] = "id";
-    $col[] = "id";
-    $col[] = "SampleHHNo";
-    $col[] = "PSU";
-    $col[] = "DivisionName";
-    $col[] = "DistrictName";
-    $col[] = "userid";
-    $col[] = "MobileNumber";
-    $col[] = "DataName";
-    $col[] = "EntryDate";
-    $col[] = "IsApproved";
-    $col[] = "DeviceID";
+if ($_REQUEST['frmID'] != '') {
+    $DataFromID = xss_clean($_REQUEST["frmID"]);
+}
+if ($_REQUEST['lci'] != '') {
+    $DataCompanyID = xss_clean($_REQUEST["lci"]);
+}
+if ($_REQUEST['lun'] != '') {
+    $LoggedUserName = xss_clean($_REQUEST["lun"]);
+}
+if ($_REQUEST['luid'] != '') {
+    $LoggedUserID = xss_clean($_REQUEST["luid"]);
+}
+if ($_REQUEST['divCode'] != '') {
+    $DivisionCode = xss_clean($_REQUEST["divCode"]);
+}
+if ($_REQUEST['distCode'] != '') {
+    $DistrictCode = xss_clean($_REQUEST["distCode"]);
+}
+if ($_REQUEST['chkAll'] != '') {
+    $DataChkAll = xss_clean($_REQUEST["chkAll"]);
+}
 
-    $qry = "SELECT xfr.id, 
-					xfr.SampleHHNo, 
-					xfr.PSU, 
-					ui.UserName, 
-					ui.id as userid, 
-					ui.FullName, 
-					ui.MobileNumber, 
-					xfr.DataName, 
-					xfr.DeviceID, 
-					xfr.EntryDate, 
-					xfr.FormGroupId, 
-					xfr.IsApproved, 
-					xfr.XFormsFilePath, 
-					COALESCE(xfr.IsEdited, 0) AS IsRowEdited, 
-					pl.DivisionName, 
-					pl.DistrictName,
-					(
-						SELECT TOP 1 mdp.ColumnValue 
-						FROM masterdatarecord_Pending mdp 
-						WHERE mdp.XFormRecordId = xfr.id 
-							AND mdp.FormId = xfr.FormId 
-							AND mdp.UserID = xfr.UserID 
-							AND mdp.CompanyId = xfr.CompanyId 
-							AND mdp.PSU = xfr.PSU 
-							AND mdp.SampleHHNo = xfr.SampleHHNo 
-							AND mdp.ColumnName = N'surveyEndDate'
-					) AS StartTime,
-					(
-						SELECT TOP 1 mdp.ColumnValue 
-						FROM masterdatarecord_Pending mdp 
-						WHERE mdp.XFormRecordId = xfr.id 
-							AND mdp.FormId = xfr.FormId 
-							AND mdp.UserID = xfr.UserID 
-							AND mdp.CompanyId = xfr.CompanyId 
-							AND mdp.PSU = xfr.PSU 
-							AND mdp.SampleHHNo = xfr.SampleHHNo 
-							AND mdp.ColumnName = N'surveyStartDate'
-					) AS EndTime 
-			FROM xformrecord xfr 
-				JOIN userinfo ui ON xfr.UserID = ui.id 
-				JOIN PSUList pl ON pl.PSUUserID = ui.id AND xfr.PSU = pl.PSU ";
-    if (strpos($LoggedUserName, 'cs') !== false) {
-        $qry .= " JOIN assignsupervisor a ON a.UserID = ui.id AND a.SupervisorID = $LoggedUserID ";
-    }
-    if (strpos($LoggedUserName, 'val') !== false) {
-        if (strpos($LoggedUserName, 'cval') === false) {
-            $qry .= " JOIN assignsupervisor a ON a.UserID = ui.id AND a.ValidatorID = $LoggedUserID ";
-        }
-    }
-    $qry .= "WHERE xfr.IsApproved = 0 
-				AND xfr.FormId = $DataFromID 
-				AND xfr.CompanyId = $DataCompanyID";
+$qry = "";
 
-    if (!empty($DataStartDate) && !empty($DataEndDate)) {
-        $qry .= " AND (xfr.EntryDate BETWEEN '$DataStartDate' AND '$DataEndDate')";
-    }
-    if (!empty($DataUserID)) {
-        $qry .= " AND xfr.UserID = $DataUserID";
-    }
+if ($DataChkAll) {
+    $qry = "SELECT xfr.id, xfr.SampleHHNo, xfr.PSU, ui.UserName, ui.id as userid, ui.FullName, ui.MobileNumber, xfr.DataName, xfr.DeviceID, xfr.EntryDate, xfr.FormGroupId, xfr.IsApproved, xfr.XFormsFilePath, COALESCE(xfr.IsEdited, 0) AS IsRowEdited, pl.DivisionName, pl.DistrictName FROM xformrecord xfr  JOIN userinfo ui ON xfr.UserID = ui.id JOIN PSUList pl ON pl.PSUUserID = ui.id AND xfr.PSU = pl.PSU WHERE xfr.IsApproved = $DataStatusUnApproved AND xfr.FormId = $DataFromID AND xfr.CompanyId = $DataCompanyID";
+} elseif ($DistrictCode) {
+    $qry = "SELECT xfr.id, xfr.SampleHHNo, xfr.PSU, ui.UserName, ui.id as userid, ui.FullName, ui.MobileNumber, xfr.DataName, xfr.DeviceID, xfr.EntryDate, xfr.FormGroupId, xfr.IsApproved, xfr.XFormsFilePath, COALESCE(xfr.IsEdited, 0) AS IsRowEdited, pl.DivisionName, pl.DistrictName FROM xformrecord xfr JOIN userinfo ui ON xfr.UserID = ui.id JOIN PSUList pl ON pl.PSUUserID = ui.id AND xfr.PSU = pl.PSU WHERE xfr.IsApproved = $DataStatusUnApproved AND xfr.FormId = $DataFromID AND xfr.CompanyId = $DataCompanyID AND pl.DivisionCode = $DivisionCode AND pl.DistrictCode = $DistrictCode";
+} else {
+    $qry = "SELECT xfr.id, xfr.SampleHHNo, xfr.PSU, ui.UserName, ui.id as userid, ui.FullName, ui.MobileNumber, xfr.DataName, xfr.DeviceID, xfr.EntryDate, xfr.FormGroupId, xfr.IsApproved, xfr.XFormsFilePath, COALESCE(xfr.IsEdited, 0) AS IsRowEdited, pl.DivisionName, pl.DistrictName FROM xformrecord xfr JOIN userinfo ui ON xfr.UserID = ui.id JOIN PSUList pl ON pl.PSUUserID = ui.id AND xfr.PSU = pl.PSU WHERE xfr.IsApproved = $DataStatusUnApproved AND xfr.FormId = $DataFromID AND xfr.CompanyId = $DataCompanyID AND pl.DivisionCode = $DivisionCode";
+}
 
-    $DivisionCode   = isset($_REQUEST['DivisionCode'])   ? xss_clean($_REQUEST['DivisionCode'])   : '';
-    $DistrictCode   = isset($_REQUEST['DistrictCode'])   ? xss_clean($_REQUEST['DistrictCode'])   : '';
-    $UpazilaCode    = isset($_REQUEST['UpazilaCode'])    ? xss_clean($_REQUEST['UpazilaCode'])    : '';
-    $UnionWardCode  = isset($_REQUEST['UnionWardCode'])  ? xss_clean($_REQUEST['UnionWardCode'])  : '';
-    $MauzaCode      = isset($_REQUEST['MauzaCode'])      ? xss_clean($_REQUEST['MauzaCode'])      : '';
-    $VillageCode    = isset($_REQUEST['VillageCode'])    ? xss_clean($_REQUEST['VillageCode'])    : '';
+$resQry = $app->getDBConnection()->fetchAll($qry);
 
+$data = array();
+$il = 1;
 
-    if (!empty($DivisionCode)) {
-        $qry .= " AND ( pl.DivisionCode = '" . $DivisionCode . "') ";
-    }
-    if (!empty($DistrictCode)) {
-        $qry .= " AND ( pl.DistrictCode = '" . $DistrictCode . "') ";
-    }
-    if (!empty($UpazilaCode)) {
-        $qry .= " AND ( pl.UpazilaCode = '" . $UpazilaCode . "') ";
-    }
-    if (!empty($UnionWardCode)) {
-        $qry .= " AND ( pl.UnionWardCode = '" . $UnionWardCode . "') ";
-    }
-    if (!empty($MauzaCode)) {
-        $qry .= " AND ( pl.MauzaCode = '" . $MauzaCode . "') ";
-    }
-    if (!empty($VillageCode)) {
-        $qry .= " AND ( pl.VillageCode = '" . $VillageCode . "') ";
-    }
+ foreach ($resQry as $row) {
+     $RecordID = $row->id;
+     $HhNo = $row->SampleHHNo;
+     $PSU = $row->PSU;
 
-    if (!empty($request['search']['value'])) {
-        $qry .= " AND (xfr.id like'" . $request['search']['value'] . "%'";
-        $qry .= " OR ui.UserName like'%" . $request['search']['value'] . "%'";
-        $qry .= " OR ui.FullName like'%" . $request['search']['value'] . "%'";
-        $qry .= " OR ui.MobileNumber like'%" . $request['search']['value'] . "%'";
-        $qry .= " OR xfr.DataName like'%" . $request['search']['value'] . "%'";
-        $qry .= " OR xfr.SampleHHNo like'%" . $request['search']['value'] . "%'";
-        $qry .= " OR xfr.DeviceID like'%" . $request['search']['value'] . "%'";
-        $qry .= " OR xfr.EntryDate like'%" . $request['search']['value'] . "%'";
-        $qry .= " OR pl.DivisionName like'%" . $request['search']['value'] . "%'";
-        $qry .= " OR pl.DistrictName like'%" . $request['search']['value'] . "%')";
-    }
-    
-    $rs = db_query($qry, $cn);
+     $UserID = $row->userid;
+     $UserName = $row->UserName;
+     $UserFullName = $row->FullName;
+     $UserData = "$UserFullName ($UserName/$UserID)";
 
-    if ($rs === false) {
-        header('Content-Type: text/plain');  // show error as plain text
-        echo "SQL FAILED:\n\n";
-        echo $qry . "\n\n";
+     $UserMobileNo = $row->MobileNumber;
+     $UserMobileNo = whatsAppLink($UserMobileNo);
 
-        if (function_exists('sqlsrv_errors')) {
-            print_r(sqlsrv_errors());
-        } elseif (function_exists('mysql_error')) {
-            echo mysql_error();
-        } elseif ($cn instanceof mysqli) {
-            echo $cn->error;
-        } else {
-            echo "Unknown DB driver";
-        }
-        exit;
-    }
+     $DataName = $row->DataName;
+     $XFormsFilePath = $row->XFormsFilePath;
+     $DeviceID = $row->DeviceID;
 
-    $TotalData = db_num_rows($rs);
-    $totalFilter = $TotalData;
+     $EntryDate = '';
+     if (!empty($row->EntryDate)) {
+         $EntryDate = date('d-m-Y H:i:s', strtotime($row->EntryDate));
+     }
 
-    if ($col[$request['order'][0]['column']] == "SampleHHNo") {
-        $col[$request['order'][0]['column']] = "CAST(" . $col[$request['order'][0]['column']] . " AS INT)";
-    }
+     $IsApproved = $row->IsApproved;
 
-    if ($request['length'] < 0) {
-        $qry .= " ORDER BY " . $col[$request['order'][0]['column']] . " " . $request['order'][0]['dir'];
-    } else {
-        $qry .= " ORDER BY " . $col[$request['order'][0]['column']] . " " . $request['order'][0]['dir'] . " OFFSET " . $request['start'] . " ROWS FETCH NEXT " . $request['length'] . " ROWS ONLY";
-    }
+     $DataStatus = GetDataStatus($IsApproved);
 
-    $resQry = $app->getDBConnection()->fetchAll($qry);
+     $DivisionName = $row->DivisionName;
+     $DistrictName = $row->DistrictName;
 
-    $data = array();
+     $IsEdited = $row->IsRowEdited;
 
-    foreach ($resQry as $row) {
-        $RecordID = $row->id;
-        $HhNo = $row->SampleHHNo;
-        $PSU = $row->PSU;
+     $Duration = 'N/A';
 
-        $UserID = $row->userid;
-        $UserName = $row->UserName;
-        $UserFullName = $row->FullName;
-        $UserData = "$UserFullName ($UserName/$UserID)";
+     $SubData = array();
 
-        $UserMobileNo = $row->MobileNumber;
-        $UserMobileNo = whatsAppLink($UserMobileNo);
+     $actions = "";
 
-        $DataName = $row->DataName;
-        $XFormsFilePath = $row->XFormsFilePath;
-        $DeviceID = $row->DeviceID;
-        
-        $EntryDate = '';
-        if (!empty($row->EntryDate)) {
-            $EntryDate = date('d-m-Y H:i:s', strtotime($row->EntryDate));
-        }
+     $actions = "<div style= \"display: flex; align-items: center; justify-content: center;\">
 
-        $IsApproved = $row->IsApproved;
-
-        $DataStatus = GetDataStatus($IsApproved);
-
-        $DivisionName = $row->DivisionName;
-        $DistrictName = $row->DistrictName;
-
-        $IsEdited = $row->IsRowEdited;
-
-        $Duration = 'N/A';
-
-        if ($row->StartTime != NULL) {
-            $start = strtotime($row->StartTime);
-            $end = strtotime($row->EndTime);
-            try {
-                $start_date = new DateTime($row->StartTime);
-            } catch (Exception $e) {
-            }
-            try {
-                $since_start = $start_date->diff(new DateTime($row->EndTime));
-            } catch (Exception $e) {
-            }
-
-            $Duration = '';
-            if ($since_start->d) {
-                $Duration = $since_start->d . ' Days ';
-            } elseif ($since_start->h) {
-                $Duration = $since_start->h . ' hours ';
-            } elseif ($since_start->i) {
-                $Duration = $since_start->i . ' minutes ';
-            } elseif ($since_start->s) {
-                $Duration = $since_start->s . ' seconds ';
-            } else {
-                $Duration = '0 seconds ';
-            }
-        }
-
-        $SubData = array();
-
-        $actions = "<div style= \"display: flex; align-items: center; justify-content: center;\">
-
-                    <button title=\"$btnTitleView\" type=\"button\" class=\"simple-ajax-modal btn btn-outline-dark\" style=\"display: inline-block;margin: 0 1px;\" data-bs-toggle=\"modal\" data-bs-target=\"#viewDataModalForViewOnly\" onclick=\"ShowDataDetailForViewOnly('$DataFromID','$RecordID', '$IsApproved', '$PSU', '$LoggedUserID', '$UserID', '$XFormsFilePath')\" onmouseover=\"this.style.backgroundColor='#e0e0e0'; this.querySelector('img').style.filter='grayscale(0%)';\" onmouseout=\"this.style.backgroundColor='transparent'; this.querySelector('img').style.filter='grayscale(100%)';\"><img src=\"../../img/view-files.png\" alt=\"View\" style=\"width:16px; height:16px; filter: grayscale(100%); transition: filter 0.3s ease;\"></button>
-
-                    <button title=\"$btnTitleView\" type=\"button\" class=\"simple-ajax-modal btn btn-outline-primary\" style=\"display: inline-block;margin: 0 1px;\" data-bs-toggle=\"modal\" data-bs-target=\"#viewDataModal\" onclick=\"ShowDataDetail('$DataFromID','$RecordID', '$IsApproved', '$PSU', '$LoggedUserID', '$UserID', '$XFormsFilePath')\"><i class=\"fas fa-eye\"></i></button>
+                <button title=\"$btnTitleView\" type=\"button\" class=\"simple-ajax-modal btn btn-outline-primary\" style=\"display: inline-block;margin: 0 1px;\" data-bs-toggle=\"modal\" data-bs-target=\"#viewDataModal\" onclick=\"ShowDataDetail('$DataFromID','$RecordID', '$IsApproved', '$PSU', '$LoggedUserID', '$UserID', '$XFormsFilePath')\"><i class=\"fas fa-eye\"></i></button>
                     
                     <button title=\"$btnTitleNotice\" type=\"button\" class=\"btn btn-outline-secondary\" style=\"display: inline-block;margin: 0 1px;\" data-bs-toggle=\"modal\" data-bs-target=\"#sendNoticeModal$RecordID\"><i class=\"fas fa-bell\"></i></button>
                 </div>
@@ -319,7 +171,7 @@ if (!empty($_POST)) {
                   </div>
                 </div>";
 
-        $actions .= " 
+     $actions .= " 
                  <!-- Send Notification Modal-->
                 <div class=\"modal fade\" id=\"sendNoticeModal$RecordID\" tabindex=\"-1\" aria-labelledby=\"editDataModalLabel\" aria-hidden=\"true\">
                   <div class=\"modal-dialog\">
@@ -358,35 +210,20 @@ if (!empty($_POST)) {
                   </div>
                 </div>";
 
-        $SubData[] = $actions;
+     $SubData[] = $il;
+     $SubData[] = $actions;
+     $SubData[] = $RecordID;
+     $SubData[] = $DivisionName;
+     $SubData[] = $DistrictName;
+     $SubData[] = $UserData;
+     $SubData[] = $UserMobileNo;
+     $SubData[] = $DataName;
+     $SubData[] = $DataStatus;
 
-        $SubData[] = $RecordID;
-        $SubData[] = $HhNo;
-        $SubData[] = $PSU;
-        $SubData[] = $DivisionName;
-        $SubData[] = $DistrictName;
-        $SubData[] = $UserData;
-        $SubData[] = $UserMobileNo;
-        $SubData[] = $DataName;
-        $SubData[] = $EntryDate;
-        $SubData[] = $DataStatus;
-        $SubData[] = $Duration;
-        $SubData[] = $DeviceID;
-        $SubData[] = $IsEdited;
+     $il++;
+     $data[] = $SubData;
+ }
 
-        $data[] = $SubData;
-    }
+$jsonData = json_encode($data);
 
-    $json_data = array(
-        "draw" => intval($request['draw']),
-        "recordsTotal" => $TotalData,
-        "recordsFiltered" => $totalFilter,
-        "data" => $data
-    );
-
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($json_data, JSON_UNESCAPED_UNICODE);
-    exit;
-
-    echo json_encode($json_data);
-}
+echo '{"aaData":' . $jsonData . '}';
