@@ -59,3 +59,4 @@ web.config
 webhookURLs/generated.xml
 webhookURLs/last_instance.xml
 webhookURLs/last_prefill_dump.json
+ViewData/ajax-data/_ajax_error_log.txt
