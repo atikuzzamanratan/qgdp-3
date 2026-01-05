@@ -67,132 +67,70 @@ if ($_REQUEST['show'] === 'Show') {
                         <form class="form-horizontal form-bordered" action="" method="post">
                             <div class="form-group row pb-3">
                                 <label class="col-lg-3 control-label text-sm-end pt-2">Form Select<span
-                                        class="required">*</span></label>
+                                            class="required">*</span></label>
                                 <div class="col-lg-6">
                                     <select data-plugin-selectTwo id="SelectedFormID" name="SelectedFormID"
-                                        class="form-control populate" required>
+                                            class="form-control populate" required>
                                         <optgroup label="Choose form">
-                                        <?PHP
-                                        $qryForm = $app->getDBConnection()->query("SELECT id, FormName FROM datacollectionform WHERE Status = 'Active' AND CompanyID = ?", $loggedUserCompanyID);
+                                            <?PHP
+                                            $qryForm = $app->getDBConnection()->query("SELECT id, FormName FROM datacollectionform WHERE Status = 'Active' AND CompanyID = ?", $loggedUserCompanyID);
 
                                             foreach ($qryForm as $row) {
-                                                echo '<option value="' . $row->id . '"' . (isset($SelectedFormID) && !empty($SelectedFormID) && $row->id == $SelectedFormID ? ' selected' : '') . '>' . $row->FormName . '</option>';
+                                                echo '<option value="' . $row->id . '"' . (!empty($SelectedFormID) && $row->id == $SelectedFormID ? ' selected' : '') . '>' . $row->FormName . '</option>';
                                             }
                                             ?>
                                         </optgroup>
-                                        
                                     </select>
                                 </div>
                             </div>
                             <?php
-								if (strpos($loggedUserName, 'cs') === false) {
-							?>
-                            <div class="form-group row pb-3">
-                                <label class="col-lg-3 control-label text-sm-end pt-2">Division Select
-                                    
-                                        
-                                    
-                                </label>
-                                <div class="col-lg-6">
-                                    <select data-plugin-selectTwo class="form-control populate" name="DivisionCode"
-                                        id="DivisionCode"
-										
-                                        onchange="ShowDropDown4('DivisionCode', 'DistrictDiv','userDiv', 'DistrictUser', ['DivisionCode'], {'RequiredUser':0})">
-                                        <option value="">Choose division</option>
-                                        <?PHP
-                                        foreach ($rsDivQuery as $row) {
-                                            echo '<option value="' . $row->DivisionCode . '"' . (isset($DivisionCode) && !empty($DivisionCode) && $row->DivisionCode == $DivisionCode ? ' selected' : '') . '>' . $row->DivisionName . '</option>';
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div id="geoDiv" style="display: none">
-                                <div class="form-group row pb-3" id="DistrictDiv"></div>
-                                <!--<div class="form-group row pb-3" id="UpazilaDiv"></div>
-                                <div class="form-group row pb-3" id="UnionWardDiv"></div>
-                                <div class="form-group row pb-3" id="MauzaDiv"></div>
-                                <div class="form-group row pb-3" id="VillageDiv"></div>-->
-                            </div>
-							<?php
-								}
-							?>
-                            <!--<div class="form-group row pb-3" id="userDiv">
-                                <label class="col-lg-3 control-label text-sm-end pt-2">User Select
-									<?php /*if (strpos($loggedUserName, 'cs') !== false) { */?><span class="required">*</span><?php /*} */?></label>
-                                <div class="col-lg-6">
-                                    <select data-plugin-selectTwo class="form-control populate"
-                                                name="SelectedUserID"
-                                                <?php /*if (strpos($loggedUserName, 'cs') !== false) { */?>
-													required
-												<?php /*} */?>
-                                                id="SelectedUserID" title="Please select user">
-                                            <option value="">Choose user</option>
+                            if (strpos($loggedUserName, 'cs') === false) {
+                                ?>
+                                <div class="form-group row pb-3">
+                                    <label class="col-lg-3 control-label text-sm-end pt-2">Division Select</label>
+                                    <div class="col-lg-6">
+                                        <select data-plugin-selectTwo class="form-control populate" name="DivisionCode"
+                                                id="DivisionCode"
+                                                onchange="ShowDropDown4('DivisionCode', 'DistrictDiv','userDiv', 'DistrictUser', ['DivisionCode'], {'RequiredUser':0})">
+                                            <option value="">Choose division</option>
                                             <?PHP
-/*                                            if ($loggedUserName == 'admin') {
-                                                $qryDistUser = "SELECT id, UserName, FullName FROM userinfo WHERE IsActive = 1 AND UserName LIKE '$dataCollectorNamePrefix%' ORDER BY UserName ASC";
-                                                $resQryDistUser = $app->getDBConnection()->fetchAll($qryDistUser);
-                                            } else if (strpos($loggedUserName, 'admin') !== false) {
-                                                $qryDistUser = "SELECT id, UserName, FullName FROM userinfo WHERE IsActive = 1 AND UserName LIKE '$dataCollectorNamePrefix%' AND CompanyID = ? ORDER BY UserName ASC";
-                                                $resQryDistUser = $app->getDBConnection()->fetchAll($qryDistUser, $loggedUserCompanyID);
-                                            } else if ($SuperID) {
-                                                $qryDistUser = "SELECT u.id, u.UserName, u.FullName FROM assignsupervisor as a JOIN userinfo as u ON a.UserID = u.id WHERE u.IsActive = 1 AND u.UserName LIKE '$dataCollectorNamePrefix%' AND a.SupervisorID = ?";
-                                                $resQryDistUser = $app->getDBConnection()->fetchAll($qryDistUser, $loggedUserID);
-                                            } else if (strpos($loggedUserName, 'dist') !== false) {
-                                                $qryDistUser = "SELECT u.id, u.UserName, u.FullName FROM assignsupervisor as a JOIN userinfo as u ON a.UserID = u.id WHERE u.IsActive = 1 AND u.UserName LIKE '$dataCollectorNamePrefix%' AND a.DistCoordinatorID = ?";
-                                                $resQryDistUser = $app->getDBConnection()->fetchAll($qryDistUser, $loggedUserID);
-                                            } else if (strpos($loggedUserName, 'cs') !== false) {
-                                                $qryDistUser = "SELECT u.id, u.UserName, u.FullName FROM assignsupervisor as a JOIN userinfo as u ON a.UserID = u.id WHERE u.IsActive = 1 AND u.UserName LIKE '$dataCollectorNamePrefix%' AND a.SupervisorID = ?";
-                                                $resQryDistUser = $app->getDBConnection()->fetchAll($qryDistUser, $loggedUserID);
-                                            } else {
-                                                $qryDistUser = "SELECT id, UserName, FullName FROM userinfo WHERE IsActive = 1 AND UserName LIKE '$dataCollectorNamePrefix%' AND CompanyID = ? and UserName = ? ORDER BY UserName ASC";
-                                                $resQryDistUser = $app->getDBConnection()->fetchAll($qryDistUser, $loggedUserCompanyID, $loggedUserName);
+                                            foreach ($rsDivQuery as $row) {
+                                                echo '<option value="' . $row->DivisionCode . '"' . (!empty($DivisionCode) && $row->DivisionCode == $DivisionCode ? ' selected' : '') . '>' . $row->DivisionName . '</option>';
                                             }
-
-                                            foreach ($resQryDistUser as $row) {
-                                                echo '<option value="' . $row->id . '"' . (isset($SelectedUserID) && !empty($SelectedUserID) && $row->id == $SelectedUserID ? ' selected' : '') . '>' . $row->UserName . ' | ' . substr($row->FullName, 0, 102) . '</option>';
-                                            }
-                                            */?>
-                                            </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row pb-3">
-                                <label class="col-lg-3 control-label text-lg-end pt-2">Date range</label>
-                                <div class="col-lg-6">
-                                    <div class="input-daterange input-group">
-                                        <input type="date" class="form-control" id="startDate"
-                                            name="startDate" value="<?php /*echo isset($SelectedStartDate) ? $SelectedStartDate : ''; */?>">
-                                        <span class="input-group-text border-start-0 border-end-0 rounded-0">to</span>
-                                        <input type="date" class="form-control" id="endDate" name="endDate" value="<?php /*echo isset($SelectedEndDate) ? $SelectedEndDate : ''; */?>">
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-
+                                <div id="geoDiv" style="display: none">
+                                    <div class="form-group row pb-3" id="DistrictDiv"></div>
+                                </div>
+                                <?php
+                            }
+                            ?>
 
                             <?php
-/*								if (strpos($loggedUserName, 'cs') === false) {
-							*/?>
+                            if (strpos($loggedUserName, 'admin')) {
+                                ?>
                                 <div class="form-group row pb-3">
                                     <label class="col-lg-3 control-label text-sm-end pt-2"></label>
                                     <div class="col-lg-6">
                                         <div class="checkbox-custom checkbox-warning">
-                                            <input id="chkAll" value="chkAll" type="checkbox" name="chkAll" <?php /*echo isset($checkAll) && $checkAll == 'chkAll' ? 'checked' : ''; */?> />
-                                            <label for="chkAll">All Users</label>
+                                            <input id="chkAll" value="chkAll" type="checkbox"
+                                                   name="chkAll" <?php echo isset($checkAll) && $checkAll == 'chkAll' ? 'checked' : ''; ?> />
+                                            <label for="chkAll">All Records</label>
                                         </div>
                                     </div>
                                 </div>
-                            --><?php
-/*								}
-							*/?>
+                                <?php
+                            }
+                            ?>
 
                             <footer class="card-footer">
                                 <div class="row justify-content-end">
                                     <div class="col-lg-9">
-                                        <input class="btn btn-primary" name="show" type="submit" id="show"
-                                            value="Show">
-
-                                        <button type="button" class="btn btn-secondary ms-4" id="clearForm">Clear</button>
+                                        <input class="btn btn-primary" name="show" type="submit" id="show" value="Show">
+                                        <button type="button" class="btn btn-secondary ms-4" id="clearForm">Clear
+                                        </button>
                                     </div>
                                 </div>
                             </footer>
@@ -200,141 +138,65 @@ if ($_REQUEST['show'] === 'Show') {
                     </div>
                 </section>
                 <?php
-
                 if ($_REQUEST['show'] === 'Show') {
                     $SelectedFormID = $_REQUEST['SelectedFormID'];
                     $SelectedCompanyID = getValue('datacollectionform', 'CompanyID', "id = $SelectedFormID");
-                    //$SelectedUserID = $_REQUEST['SelectedUserID'];
-                    //$checkAll = $_REQUEST['chkAll'];
+                    $SelectedDiv = $_REQUEST['DivisionCode'];
+                    $SelectedDist = $_REQUEST['DistrictCode'];
+                    $checkAll = $_REQUEST['chkAll'];
 
-                    /*if ($checkAll == 'chkAll') {
-                        $SelectedCheckAll = 1;
-                    } else {
-                        $SelectedCheckAll = 0;
-                    }
+                    $DataStatusCode = $DataStatusUnApproved;
 
-                    if (!empty($_REQUEST['startDate'])) {
-                        $SelectedStartDate = date('Y-m-d', strtotime($_REQUEST['startDate'])) . $defaultStartTimeString;
-                    }
-                    if (!empty($_REQUEST['endDate'])) {
-                        $SelectedEndDate = date('Y-m-d', strtotime($_REQUEST['endDate'])) . $defaultEndTimeString;
-                    }
-                    if (empty($SelectedUserID) && empty($checkAll)) {
-                        MsgBox('Please select All Users or a specific User.');
+                    if (empty($SelectedDiv) && empty($SelectedDist) && empty($checkAll)) {
+                        MsgBox('Please select an option.');
                         ReloadPage();
-                    } else {*/
-                ?>
+                    } else {
+                        if ($checkAll == 'chkAll') {
+                            $dataURL = $baseURL . "ViewData/ajax-data/view-un-approved-data-ajax-data.php?statusCode=$DataStatusCode&chkAll=1&frmID=$SelectedFormID&lun=$loggedUserName&lci=$loggedUserCompanyID&luid=$loggedUserID";
+                        } else {
+                            $dataURL = $baseURL . "ViewData/ajax-data/view-un-approved-data-ajax-data.php?statusCode=$DataStatusCode&frmID=$SelectedFormID&lun=$loggedUserName&lci=$loggedUserCompanyID&luid=$loggedUserID&divCode=$SelectedDiv&distCode=$SelectedDist";
+                        }
 
-                        <input type="hidden" id="DistrictCodeSelected" value="<?php echo $DistrictCode; ?>">
-                        <!--<input type="hidden" id="UpazilaCodeSelected" value="<?php /*echo $UpazilaCode; */?>">
-                        <input type="hidden" id="UnionWardCodeSelected" value="<?php /*echo $UnionWardCode; */?>">
-                        <input type="hidden" id="MauzaCodeSelected" value="<?php /*echo $MauzaCode; */?>">
-                        <input type="hidden" id="VillageCodeSelected" value="<?php /*echo $VillageCode; */?>">-->
-						
-						<input type="hidden" id="DataFromID" value="<?php echo $SelectedFormID; ?>">
-                        <input type="hidden" id="DataUserID" value="<?php echo $SelectedUserID; ?>">
-                        <input type="hidden" id="DataChkAll" value="<?php echo $SelectedCheckAll; ?>">
-                        <input type="hidden" id="DataCompanyID" value="<?php echo $SelectedCompanyID; ?>">
-                        <input type="hidden" id="LoggedUserName" value="<?php echo $loggedUserName; ?>">
-                        <input type="hidden" id="LoggedUserID" value="<?php echo $loggedUserID; ?>">
-                        <input type="hidden" id="DataStartDate"
-                            value="<?php if (!empty($SelectedStartDate)) echo $SelectedStartDate; ?>">
-                        <input type="hidden" id="DataEndDate"
-                            value="<?php if (!empty($SelectedEndDate)) echo $SelectedEndDate; ?>">
+                        ?>
 
-                        <br>
                         <section class="card">
-                            <div class="card-header">
-                                <div class="card-subtitle"></div>
-                                <div class="card-subtitle"></div>
-                                <div class="card-subtitle"></div>
-                                <div class="card-title"><?php echo getValue('datacollectionform', 'FormName', "id = $SelectedFormID"); ?></div>
-                                <div class="card-subtitle"></div>
-                            </div>
+                            <header class="card-header">
+                                <div class="form-group ml-2 row col-lg-1 " style="margin-left: 1px; margin-top:20px;">
+                                    <button class="btn ml-2 btn-success"
+                                            onclick="exportTableToExcel('datatable-ajax', 'UserList')">
+                                        Download
+                                    </button>
+                                </div>
+                            </header>
                             <div class="card-body">
-                                <table class="table table-bordered table-striped" id="tblViewData">
+                                <table class="table table-bordered table-striped" id="datatable-ajax"
+                                       data-url="<?php echo $dataURL; ?>">
                                     <thead>
-                                        <tr>
-                                            <th>Actions</th>
-                                            <th>Record ID</th>
-                                            <th>HH No</th>
-                                            <th>PSU</th>
-                                            <th>Division Name</th>
-                                            <th>District Name</th>
-                                            <th>User</th>
-                                            <th>Mobile</th>
-											<th>Data Name</th>
-                                            <th>Entry Date</th>
-                                            <th>Status</th>
-                                            <th>Duration</th>
-                                            <th>Device ID</th>
-                                        </tr>
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Actions</th>
+                                        <th>Record ID</th>
+                                        <th>Division Name</th>
+                                        <th>District Name</th>
+                                        <th>User</th>
+                                        <th>Mobile</th>
+                                        <th>Data Name</th>
+                                        <th>Status</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
                                     </tbody>
                                 </table>
                             </div>
                         </section>
-                <?php
-                    //}
+                        <?php
+                    }
                 }
                 ?>
             </div>
         </div>
     </section>
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        var body = $('body');
-		
-		var DivisionCode = body.find('#DivisionCode').find(":selected").val();
-		
-		var DistrictCode = body.find('#DistrictCodeSelected').val(),
-			UpazilaCode = body.find('#UpazilaCodeSelected').val(),
-			UnionWardCode = body.find('#UnionWardCodeSelected').val(),
-			MauzaCode = body.find('#MauzaCodeSelected').val(),
-			VillageCode = body.find('#VillageCodeSelected').val();
-		
-		var	DataFromID = body.find('#DataFromID').val(),
-			DataUserID = body.find('#DataUserID').val(),
-			DataChkAll = body.find('#DataChkAll').val(),
-			DataCompanyID = body.find('#DataCompanyID').val(),
-			LoggedUserName = body.find('#LoggedUserName').val(),
-			LoggedUserID = body.find('#LoggedUserID').val(),
-			DataStartDate = body.find('#DataStartDate').val(),
-			DataEndDate = body.find('#DataEndDate').val();
-		
-        var dataTable = $('#tblViewData').DataTable({
-            "aLengthMenu": [
-                [20, 10, 50, 100, 500, 1000, 5000, 100000000],
-                [20, 10, 50, 100, 500, 1000, 5000, "All"]
-            ],
-            "processing": true,
-            "serverSide": true,
-            "ajax": {
-                data: {
-                    DataFromID: DataFromID,
-                    DataUserID: DataUserID,
-                    DataChkAll: DataChkAll,
-                    DataCompanyID: DataCompanyID,
-                    LoggedUserName: LoggedUserName,
-                    LoggedUserID: LoggedUserID,
-                    DataStartDate: DataStartDate,
-                    DataEndDate: DataEndDate,
-					DivisionCode: DivisionCode,
-					DistrictCode: DistrictCode,
-					UpazilaCode: UpazilaCode,
-					UnionWardCode: UnionWardCode,
-					MauzaCode: MauzaCode,
-					VillageCode: VillageCode
-                },
-                url: "<?php echo $dataURL = $baseURL . "ViewData/ajax-data/view-un-approved-data-ajax-data.php"; ?>",
-                type: "POST"
-            }
-        });
-    });
-</script>
 
 <script type="text/javascript">
     function SendNotification(senderID, toID, message, companyID, data) {

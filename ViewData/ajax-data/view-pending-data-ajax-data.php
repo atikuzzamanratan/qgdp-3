@@ -27,7 +27,9 @@ if (!$cn) {
     die("Database connection failed.\n\n" . print_r(sqlsrv_errors(), true));
 }
 
-
+if ($_REQUEST['statusCode'] != '') {
+    $DataStatus = xss_clean($_REQUEST["statusCode"]);
+}
 if ($_REQUEST['frmID'] != '') {
     $DataFromID = xss_clean($_REQUEST["frmID"]);
 }
@@ -53,11 +55,11 @@ if ($_REQUEST['chkAll'] != '') {
 $qry = "";
 
 if ($DataChkAll) {
-    $qry = "SELECT xfr.id, xfr.SampleHHNo, xfr.PSU, ui.UserName, ui.id as userid, ui.FullName, ui.MobileNumber, xfr.DataName, xfr.DeviceID, xfr.EntryDate, xfr.FormGroupId, xfr.IsApproved, xfr.XFormsFilePath, COALESCE(xfr.IsEdited, 0) AS IsRowEdited, pl.DivisionName, pl.DistrictName FROM xformrecord xfr  JOIN userinfo ui ON xfr.UserID = ui.id JOIN PSUList pl ON pl.PSUUserID = ui.id AND xfr.PSU = pl.PSU WHERE xfr.IsApproved = $DataStatusUnApproved AND xfr.FormId = $DataFromID AND xfr.CompanyId = $DataCompanyID";
+    $qry = "SELECT xfr.id, xfr.SampleHHNo, xfr.PSU, ui.UserName, ui.id as userid, ui.FullName, ui.MobileNumber, xfr.DataName, xfr.DeviceID, xfr.EntryDate, xfr.FormGroupId, xfr.IsApproved, xfr.XFormsFilePath, COALESCE(xfr.IsEdited, 0) AS IsRowEdited, pl.DivisionName, pl.DistrictName FROM xformrecord xfr  JOIN userinfo ui ON xfr.UserID = ui.id JOIN PSUList pl ON pl.PSUUserID = ui.id AND xfr.PSU = pl.PSU WHERE xfr.IsApproved = $DataStatus AND xfr.FormId = $DataFromID AND xfr.CompanyId = $DataCompanyID";
 } elseif ($DistrictCode) {
-    $qry = "SELECT xfr.id, xfr.SampleHHNo, xfr.PSU, ui.UserName, ui.id as userid, ui.FullName, ui.MobileNumber, xfr.DataName, xfr.DeviceID, xfr.EntryDate, xfr.FormGroupId, xfr.IsApproved, xfr.XFormsFilePath, COALESCE(xfr.IsEdited, 0) AS IsRowEdited, pl.DivisionName, pl.DistrictName FROM xformrecord xfr JOIN userinfo ui ON xfr.UserID = ui.id JOIN PSUList pl ON pl.PSUUserID = ui.id AND xfr.PSU = pl.PSU WHERE xfr.IsApproved = $DataStatusUnApproved AND xfr.FormId = $DataFromID AND xfr.CompanyId = $DataCompanyID AND pl.DivisionCode = $DivisionCode AND pl.DistrictCode = $DistrictCode";
+    $qry = "SELECT xfr.id, xfr.SampleHHNo, xfr.PSU, ui.UserName, ui.id as userid, ui.FullName, ui.MobileNumber, xfr.DataName, xfr.DeviceID, xfr.EntryDate, xfr.FormGroupId, xfr.IsApproved, xfr.XFormsFilePath, COALESCE(xfr.IsEdited, 0) AS IsRowEdited, pl.DivisionName, pl.DistrictName FROM xformrecord xfr JOIN userinfo ui ON xfr.UserID = ui.id JOIN PSUList pl ON pl.PSUUserID = ui.id AND xfr.PSU = pl.PSU WHERE xfr.IsApproved = $DataStatus AND xfr.FormId = $DataFromID AND xfr.CompanyId = $DataCompanyID AND pl.DivisionCode = $DivisionCode AND pl.DistrictCode = $DistrictCode";
 } else {
-    $qry = "SELECT xfr.id, xfr.SampleHHNo, xfr.PSU, ui.UserName, ui.id as userid, ui.FullName, ui.MobileNumber, xfr.DataName, xfr.DeviceID, xfr.EntryDate, xfr.FormGroupId, xfr.IsApproved, xfr.XFormsFilePath, COALESCE(xfr.IsEdited, 0) AS IsRowEdited, pl.DivisionName, pl.DistrictName FROM xformrecord xfr JOIN userinfo ui ON xfr.UserID = ui.id JOIN PSUList pl ON pl.PSUUserID = ui.id AND xfr.PSU = pl.PSU WHERE xfr.IsApproved = $DataStatusUnApproved AND xfr.FormId = $DataFromID AND xfr.CompanyId = $DataCompanyID AND pl.DivisionCode = $DivisionCode";
+    $qry = "SELECT xfr.id, xfr.SampleHHNo, xfr.PSU, ui.UserName, ui.id as userid, ui.FullName, ui.MobileNumber, xfr.DataName, xfr.DeviceID, xfr.EntryDate, xfr.FormGroupId, xfr.IsApproved, xfr.XFormsFilePath, COALESCE(xfr.IsEdited, 0) AS IsRowEdited, pl.DivisionName, pl.DistrictName FROM xformrecord xfr JOIN userinfo ui ON xfr.UserID = ui.id JOIN PSUList pl ON pl.PSUUserID = ui.id AND xfr.PSU = pl.PSU WHERE xfr.IsApproved = $DataStatus AND xfr.FormId = $DataFromID AND xfr.CompanyId = $DataCompanyID AND pl.DivisionCode = $DivisionCode";
 }
 
 $resQry = $app->getDBConnection()->fetchAll($qry);

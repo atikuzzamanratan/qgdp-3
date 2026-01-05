@@ -87,13 +87,10 @@ if ($_REQUEST['show'] === 'Show') {
                             if (strpos($loggedUserName, 'cs') === false) {
                                 ?>
                                 <div class="form-group row pb-3">
-                                    <label class="col-lg-3 control-label text-sm-end pt-2">Division Select
-
-                                    </label>
+                                    <label class="col-lg-3 control-label text-sm-end pt-2">Division Select</label>
                                     <div class="col-lg-6">
                                         <select data-plugin-selectTwo class="form-control populate" name="DivisionCode"
                                                 id="DivisionCode"
-
                                                 onchange="ShowDropDown4('DivisionCode', 'DistrictDiv','userDiv', 'DistrictUser', ['DivisionCode'], {'RequiredUser':0})">
                                             <option value="">Choose division</option>
                                             <?PHP
@@ -110,7 +107,6 @@ if ($_REQUEST['show'] === 'Show') {
                                 <?php
                             }
                             ?>
-
 
                             <?php
                             if (strpos($loggedUserName, 'admin')) {
@@ -149,18 +145,17 @@ if ($_REQUEST['show'] === 'Show') {
                     $SelectedDist = $_REQUEST['DistrictCode'];
                     $checkAll = $_REQUEST['chkAll'];
 
+                    $DataStatusCode = $DataStatusPending;
+
                     if (empty($SelectedDiv) && empty($SelectedDist) && empty($checkAll)) {
                         MsgBox('Please select an option.');
                         ReloadPage();
                     } else {
                         if ($checkAll == 'chkAll') {
-                            $dataURL = $baseURL . "ViewData/ajax-data/view-pending-data-ajax-data.php?chkAll=1&frmID=$SelectedFormID&lun=$loggedUserName&lci=$loggedUserCompanyID&luid=$loggedUserID";
+                            $dataURL = $baseURL . "ViewData/ajax-data/view-pending-data-ajax-data.php?statusCode=$DataStatusCode&chkAll=1&frmID=$SelectedFormID&lun=$loggedUserName&lci=$loggedUserCompanyID&luid=$loggedUserID";
                         } else {
-                            $dataURL = $baseURL . "ViewData/ajax-data/view-pending-data-ajax-data.php?frmID=$SelectedFormID&lun=$loggedUserName&lci=$loggedUserCompanyID&luid=$loggedUserID&divCode=$SelectedDiv&distCode=$SelectedDist";
+                            $dataURL = $baseURL . "ViewData/ajax-data/view-pending-data-ajax-data.php?statusCode=$DataStatusCode&frmID=$SelectedFormID&lun=$loggedUserName&lci=$loggedUserCompanyID&luid=$loggedUserID&divCode=$SelectedDiv&distCode=$SelectedDist";
                         }
-
-                        //echo $dataURL;
-                        //exit();
 
                         ?>
 

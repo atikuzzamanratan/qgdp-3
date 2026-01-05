@@ -57,3 +57,17 @@
 2026-01-04 11:02:45 [8] Undefined index: chkAll in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-pending-data-ajax-data.php:49
 2026-01-04 11:02:45 [8] Undefined variable: DataChkAll in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-pending-data-ajax-data.php:55
 2026-01-04 11:02:45 [8] Undefined variable: DistrictCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-pending-data-ajax-data.php:57
+2026-01-05 06:38:56 [8] Undefined index: divCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-pending-data-ajax-data.php:45
+2026-01-05 06:38:56 [8] Undefined index: distCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-pending-data-ajax-data.php:48
+2026-01-05 06:41:30 [8] Undefined index: divCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-pending-data-ajax-data.php:45
+2026-01-05 06:41:30 [8] Undefined index: distCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-pending-data-ajax-data.php:48
+2026-01-05 06:49:08 [8] Undefined index: divCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-un-approved-data-ajax-data.php:45
+2026-01-05 06:49:08 [8] Undefined index: distCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-un-approved-data-ajax-data.php:48
+2026-01-05 07:20:59 [8] Undefined index: divCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-approved-data-ajax-data.php:45
+2026-01-05 07:20:59 [8] Undefined index: distCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-approved-data-ajax-data.php:48
+2026-01-05 07:22:07 [8] Undefined index: divCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-approved-data-ajax-data.php:45
+2026-01-05 07:22:07 [8] Undefined index: distCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-approved-data-ajax-data.php:48
+2026-01-05 07:22:15 [8] Undefined index: divCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-un-approved-data-ajax-data.php:45
+2026-01-05 07:22:15 [8] Undefined index: distCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-un-approved-data-ajax-data.php:48
+2026-01-05 07:22:25 [8] Undefined index: divCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-pending-data-ajax-data.php:45
+2026-01-05 07:22:25 [8] Undefined index: distCode in D:\wwwroot\SOLVERS\qgdp-3\ViewData\ajax-data\view-pending-data-ajax-data.php:48
