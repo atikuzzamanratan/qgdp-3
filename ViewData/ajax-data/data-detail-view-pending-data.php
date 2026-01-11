@@ -15,6 +15,7 @@ $RecordID = xss_clean($_REQUEST['id']);
 $DataFromID = xss_clean($_REQUEST['dataFromID']);
 $IsApproved = xss_clean($_REQUEST['status']);
 $PSU = xss_clean($_REQUEST['psu']);
+$PSU = getValue('PSUList', 'DistrictName', "PSU = $PSU");
 $LoggedUserID = xss_clean($_REQUEST['loggedUserID']);
 $AgentID = xss_clean($_REQUEST['agentID']);
 $XFormsFilePath = xss_clean($_REQUEST['XFormsFilePath']);
@@ -371,7 +372,7 @@ if ($EditPermission == 1 || (strpos($LoggedUserName, 'val') !== false) || strpos
 		<td>&nbsp;</td>
     </tr>
     <tr align=\"left\" class=\"textRpt\">
-        <td><b>PSU</b></td>
+        <td><b>District</b></td>
         <td><b>$PSU</b></td>
 		<td>&nbsp;</td>
     </tr>
@@ -394,11 +395,11 @@ if ($EditPermission == 1 || (strpos($LoggedUserName, 'val') !== false) || strpos
     <tr align=\"left\" class=\"textRpt\">
         <td><b>PSU</b></td>
         <td><b>$PSU</b></td>
-    </tr>
-    <tr align=\"left\" class=\"textRpt\">
+    </tr>";
+    /*<tr align=\"left\" class=\"textRpt\">
         <td style='color: red'><b>Data Collection Duration</b></td>
         <td style='color: red'><b>$Duration</b></td>
-    </tr>";
+    </tr>*/
 }
 
 $dataViewTable .= "

@@ -15,6 +15,7 @@ $RecordID = xss_clean($_REQUEST['id']);
 $DataFromID = xss_clean($_REQUEST['dataFromID']);
 $IsApproved = xss_clean($_REQUEST['status']);
 $PSU = xss_clean($_REQUEST['psu']);
+$PSU = getValue('PSUList', 'DistrictName', "PSU = $PSU");
 $LoggedUserID = xss_clean($_REQUEST['loggedUserID']);
 $AgentID = xss_clean($_REQUEST['agentID']);
 $XFormsFilePath = xss_clean($_REQUEST['XFormsFilePath']);
@@ -89,30 +90,6 @@ if ($since_start->d) {
 }elseif ($since_start->s) {
     $Duration = $since_start->s . ' seconds ';
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /**
  * ------------------------------------------------------------
@@ -310,14 +287,6 @@ function replaceStandaloneNumbers($text, $map)
             // }
 
 
-
-
-
-
-
-
-
-
             $prev = ($start > 0) ? $chars[$start - 1] : '';
             $next = ($i < $len) ? $chars[$i] : '';
             $next2 = ($i + 1 < $len) ? $chars[$i + 1] : '';
@@ -347,16 +316,6 @@ function replaceStandaloneNumbers($text, $map)
             } else {
                 $out .= $number;
             }
-
-
-
-
-
-
-
-
-
-
 
         } else {
             $out .= $chars[$i];
@@ -423,25 +382,6 @@ function convertNumbersToLabels($comment, $columnName, $formId, $app)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 $dataViewTable = "
 <div class=\"modal-header\">
     <h5 class=\"modal-title\" id=\"editDataModalLabel\">Data Detail View</h5>
@@ -452,7 +392,7 @@ $dataViewTable = "
 <table align=\"left\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" class=\"table table-striped table-bordered datatables\" id=\"example\">
     <thead>";
 
-if ($EditPermission == 1 || (strpos($LoggedUserName, 'val') !== false && $IsApproved) || strpos($LoggedUserName, 'sasadmin') !== false) {
+if ($EditPermission == 1 || (strpos($LoggedUserName, 'val') !== false && $IsApproved) || strpos($LoggedUserName, 'admin') !== false) {
 	$dataViewTable .= "<tr role=\"row\">
         <th width=\"40%\">Column Lebel</th>
         <th width=\"40%\">Column Value</th>
@@ -466,15 +406,15 @@ if ($EditPermission == 1 || (strpos($LoggedUserName, 'val') !== false && $IsAppr
 		<td>&nbsp;</td>
     </tr>
     <tr align=\"left\" class=\"textRpt\">
-        <td><b>PSU</b></td>
+        <td><b>District</b></td>
         <td><b>$PSU</b></td>
 		<td>&nbsp;</td>
-    </tr>
-    <tr align=\"left\" class=\"textRpt\">
+    </tr>";
+    /*<tr align=\"left\" class=\"textRpt\">
         <td style='color: red'><b>Data Collection Duration</b></td>
         <td style='color: red'><b>$Duration</b></td>
 		<td>&nbsp;</td>
-    </tr>";
+    </tr>*/
 } else {
 	$dataViewTable .= "<tr role=\"row\">
         <th width=\"50%\">Column Lebel</th>

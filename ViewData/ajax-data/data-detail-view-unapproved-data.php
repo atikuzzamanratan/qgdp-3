@@ -15,6 +15,7 @@ $DataFromID = xss_clean($_REQUEST['DataFromID']);
 $RecordID = xss_clean($_REQUEST['id']);
 $IsApproved = xss_clean($_REQUEST['status']);
 $PSU = xss_clean($_REQUEST['psu']);
+$PSU = getValue('PSUList', 'DistrictName', "PSU = $PSU");
 $LoggedUserID = xss_clean($_REQUEST['loggedUserID']);
 $AgentID = xss_clean($_REQUEST['agentID']);
 $XFormsFilePath = xss_clean($_REQUEST['XFormsFilePath']);
@@ -97,41 +98,6 @@ if ($since_start->d) {
 } elseif ($since_start->s) {
     $Duration = $since_start->s . ' seconds ';
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
@@ -330,18 +296,6 @@ function replaceStandaloneNumbers($text, $map)
             // }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
             $prev = ($start > 0) ? $chars[$start - 1] : '';
             $next = ($i < $len) ? $chars[$i] : '';
             $next2 = ($i + 1 < $len) ? $chars[$i + 1] : '';
@@ -371,18 +325,6 @@ function replaceStandaloneNumbers($text, $map)
             } else {
                 $out .= $number;
             }
-
-
-
-
-
-
-
-
-
-
-
-
 
         } else {
             $out .= $chars[$i];
@@ -449,45 +391,6 @@ function convertNumbersToLabels($comment, $columnName, $formId, $app)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //---------------------------------------------------------------------------------------------------
 
 $dataViewTable = "
@@ -510,13 +413,13 @@ $dataViewTable = "
         <td width=\"50%\"><b>$RecordID</b></td>
     </tr>
     <tr align=\"left\" class=\"textRpt\">
-        <td width=\"50%\"><b>PSU</b></td>
+        <td width=\"50%\"><b>District</b></td>
         <td width=\"50%\"><b>$PSU</b></td>
-    </tr>
-    <tr align=\"left\" class=\"textRpt\">
+    </tr>";
+    /*<tr align=\"left\" class=\"textRpt\">
         <td width=\"50%\" style='color: red'><b>Data Collection Duration</b></td>
         <td width=\"50%\" style='color: red'><b>$Duration</b></td>
-    </tr>";
+    </tr>*/
 
 $dataViewTable .= "
     </tbody>

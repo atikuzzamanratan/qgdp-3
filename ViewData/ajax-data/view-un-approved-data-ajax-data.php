@@ -106,9 +106,13 @@ foreach ($resQry as $row) {
 
     $actions = "<div style= \"display: flex; align-items: center; justify-content: center;\">
 
-                <button title=\"$btnTitleView\" type=\"button\" class=\"simple-ajax-modal btn btn-outline-primary\" style=\"display: inline-block;margin: 0 1px;\" data-bs-toggle=\"modal\" data-bs-target=\"#viewDataModal\" onclick=\"ShowDataDetail('$DataFromID','$RecordID', '$IsApproved', '$PSU', '$LoggedUserID', '$UserID', '$XFormsFilePath')\"><i class=\"fas fa-eye\"></i></button>
-                    
-                    <button title=\"$btnTitleNotice\" type=\"button\" class=\"btn btn-outline-secondary\" style=\"display: inline-block;margin: 0 1px;\" data-bs-toggle=\"modal\" data-bs-target=\"#sendNoticeModal$RecordID\"><i class=\"fas fa-bell\"></i></button>
+                <button title=\"$btnTitleView\" type=\"button\" class=\"simple-ajax-modal btn btn-outline-primary\" style=\"display: inline-block;margin: 0 1px;\" data-bs-toggle=\"modal\" data-bs-target=\"#viewDataModal\" onclick=\"ShowDataDetail('$DataFromID','$RecordID', '$IsApproved', '$PSU', '$LoggedUserID', '$UserID', '$XFormsFilePath')\"><i class=\"fas fa-eye\"></i></button>";
+
+        if (((strpos($LoggedUserName, 'admin') !== false) || (strpos($LoggedUserName, 'cd') !== false)) and (strpos($LoggedUserName, 'dist') === false)) {
+            $actions .= "<a href=\"#\" title=\"$btnTitleEdit\" type=\"button\" class=\"btn btn-outline-warning\" style=\"display: inline-block;margin: 0 1px;\" onClick='window.open(\"webhookURLs/review.php?xFormId=$RecordID\", \"_blank\").focus(); return false;'><i class=\"fas fa-pencil-alt\"></i></a>";
+        }
+
+    $actions .= " <button title=\"$btnTitleNotice\" type=\"button\" class=\"btn btn-outline-secondary\" style=\"display: inline-block;margin: 0 1px;\" data-bs-toggle=\"modal\" data-bs-target=\"#sendNoticeModal$RecordID\"><i class=\"fas fa-bell\"></i></button>
                 </div>
                 <script type=\"text/javascript\">
                     function ShowDataDetail(DataFromID, recordID, isAproved, psu, loggedUserID, agentID, XFormsFilePath, data) {
